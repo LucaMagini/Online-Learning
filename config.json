@@ -1,0 +1,167 @@
+{
+  "LogisticRegression": {
+    "optimizer": {
+      "type": "string",
+      "default": "None",
+      "values": [
+        "AMSGrad",
+        "AdaBound",
+        "AdaDelta",
+        "AdaGrad",
+        "AdaMax",
+        "Adam",
+        "Averager",
+        "FTRLProximal",
+        "Momentum",
+        "Nadam",
+        "NesterovMomentum",
+        "Optimizer",
+        "RMSProp",
+        "SGD"
+      ]
+    },
+    "loss": {
+      "type": "string",
+      "default": "Log",
+      "values": [
+        "Absolute",
+        "BinaryFocalLoss",
+        "BinaryLoss",
+        "Cauchy",
+        "CrossEntropy",
+        "EpsilonInsensitiveHinge",
+        "Hinge",
+        "Huber",
+        "Log",
+        "MultiClassLog",
+        "Poisson",
+        "Quantile",
+        "RegressionLoss",
+        "Squared"
+      ]
+    },
+    "l2": {
+      "type": "float",
+      "default": 0.0,
+      "values": [ "R" ]
+    },
+    "intercept_init": {
+      "type": "float",
+      "default": 0.0,
+      "values": [ "R" ]
+    },
+    "intercept_lr": {
+      "type": "float",
+      "default": 0.01,
+      "values": [ "R" ]
+    },
+    "clip_gradient": {
+      "type": "float",
+      "default": 0.01,
+      "values": [ "R" ]
+    },
+    "initializer": {
+      "type": "string",
+      "default": "None",
+      "values": [
+        "Constant",
+        "Normal",
+        "Zeros"
+      ]
+    }
+  },
+  "RandomForest": {
+    "n_models": {
+      "type": "int",
+      "default": 10,
+      "values": [ "N" ]
+    },
+    "max_features": {
+      "type": "string/int",
+      "default": "sqrt",
+      "values": [ "N_or_list", "sqrt", "log2", "None" ]
+    },
+    "lambda_value": {
+      "type": "int",
+      "default": 6,
+      "values": [ "N" ]
+    },
+    "metric": {
+      "type": "string",
+      "default": "Accuracy",
+      "values": [
+        "Accuracy",
+        "BalancedAccuracy",
+        "BinaryMetric",
+        "ConfusionMatrix",
+        "MAE",
+        "MSE",
+        "RMSE"
+      ]
+    },
+    "disable_weighted_vote": {
+      "type": "string",
+      "default": "False",
+      "values": [ "True", "False" ]
+    },
+    "grace_period": {
+      "type": "int",
+      "default": 50,
+      "values": [ "N" ]
+    },
+    "max_depth": {
+      "type": "int",
+      "default": "None",
+      "values": [ "N" ]
+    },
+    "split_criterion": {
+      "type": "string",
+      "default": "info_gain",
+      "values": [ "info_gain", "gini", "hellinger" ]
+    },
+    "leaf_prediction": {
+      "type": "string",
+      "default": "nba",
+      "values": [ "nba", "nb", "mc" ]
+    },
+    "nb_threshold": {
+      "type": "int",
+      "default": 0,
+      "values": [ "N0" ]
+    },
+    "max_size": {
+      "type": "int",
+      "default": 32,
+      "values": [ "N" ]
+    },
+    "seed": {
+      "type": "int",
+      "default": "None",
+      "values": [ "N" ]
+    }
+  },
+  "KNN": {
+    "n_neighbors": {
+      "type": "int",
+      "default": 5,
+      "values": [ "N" ]
+    },
+    "window_size": {
+      "type": "int",
+      "default": 1000,
+      "values": [ "N" ]
+    },
+    "leaf_size": {
+      "type": "int",
+      "default": 30,
+      "values": [ "N" ]
+    },
+    "p": {
+      "type": "int",
+      "default": 2,
+      "values": [ "N" ]
+    }
+  },
+  "GaussianNB": {
+  }
+}
