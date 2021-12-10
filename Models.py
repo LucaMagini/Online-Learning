@@ -1,4 +1,4 @@
-import pickle, json, sys #sys.stdout.flush() [To print on console]
+import pickle, json, glob, sys #sys.stdout.flush() [To print on console]
 from utilities import check_list, check_real, check_natural, check_natural_0
 from river import optim
 from river.preprocessing import StandardScaler
@@ -197,4 +197,83 @@ class Model:
                 pickle.dump(self.model, f)
                 
         return True, self.model
+    
+    
+def check_models():
+
+    lr_models = []
+    rf_models = []
+    gnb_models = []
+    knn_models = []
+    
+    models_list = glob.glob('*.pkl')
+    for elem in models_list:
+        end = elem.find("_")
+        name = elem[:end]
+        if name.lower() == 'logisticregression':
+            start = elem.find("_")
+            end = elem.find(".")
+            name = elem[start+1:end]
+            lr_models.append(name)
+        elif name.lower() == 'randomforest':
+            start = elem.find("_")
+            end = elem.find(".")
+            name = elem[start+1:end]
+            rf_models.append(name)
+        elif name.lower() == 'gaussiannb':
+            start = elem.find("_")
+            end = elem.find(".")
+            name = elem[start+1:end]
+            gnb_models.append(name)    
+        elif name.lower() == 'knn':
+            start = elem.find("_")
+            end = elem.find(".")
+            name = elem[start+1:end]
+            knn_models.append(name)
+    
+    data = {}
+    flag = False                     
+            
+    if lr_models != []:
+        flag = True
+        data['Logistic Regression Models'] = []
+        for model_name in lr_models:
+            data['Logistic Regression Models'].append(model_name)
+    if rf_models != []:
+        flag = True
+        data['Random Forest Models'] = []
+        for model_name in rf_models:
+            data['Random Forest Models'].append(model_name)        
+    if gnb_models != []:
+        flag = True
+        data['Gaussian Naive Bayes Models'] = []
+        for model_name in gnb_models:
+            data['Gaussian Naive Bayes Models'].append(model_name) 
+    if knn_models != []:
+        flag = True
+        data['K-Nearest Neighbors Models'] = []
+        for model_name in knn_models:
+            data['K-Nearest Neighbors Models'].append(model_name)
+            
+    if flag == False:
+        data = 'THERE IS NO MODEL'
         
+    result = {
+                'Result':'OK',
+                'Data': data
+             }   
+    
+    return result
+            
+            
+            
+        
+        
+        
+        
+    
+    
+    
+    
+    
+    

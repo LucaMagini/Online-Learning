@@ -1,7 +1,7 @@
 import flask
 from flask_selfdoc import Autodoc
 from flask import request
-from Models import Model, default
+from Models import Model, default, check_models
 from utilities import cast_string
 
 app = flask.Flask(__name__)
@@ -230,8 +230,20 @@ def create_model():
     #     response = flask.jsonify(result)
     #     response.headers.set('Content-Type', 'application/json')
         
-    #     return response    
-
+    #     return response 
+    
+@app.route('/api/v1/existing_models', methods = ['GET'])
+@auto.doc()
+                                  
+def existing_models():
+    "Shows the list of all the existing models" 
+    
+    result = check_models()
+    
+    response = flask.jsonify(result)
+    response.headers.set('Content-Type', 'application/json')
+    
+    return response
 
 
 if __name__ == "__main__":
