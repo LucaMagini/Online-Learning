@@ -1,8 +1,8 @@
-import flask
+import flask, sys #sys.stdout.flush() [To print on console]
 from flask_selfdoc import Autodoc
 from flask import request
-from Models import Model, default, check_models
-from utilities import cast_string
+from Models import Model, default
+from utilities import cast_string, check_models
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
@@ -149,10 +149,10 @@ def create_model():
         
         if model_type.lower() == 'logisticregression':
             
-            if request.args.get('intercept_lr') != None:
-                _intercept = _model['OneVsRestClassifier'].classifier.intercept_lr
-            else:
-                _intercept = str(_model['OneVsRestClassifier'].classifier.intercept_lr.learning_rate)
+            # if request.args.get('intercept_lr') != None:
+            #     _intercept = _model['OneVsRestClassifier'].classifier.intercept_lr
+            # else:
+            #     _intercept = str(_model['OneVsRestClassifier'].classifier.intercept_lr.learning_rate)
             
             info = {'Model': model_type,
                     'Name': name,
@@ -161,7 +161,8 @@ def create_model():
                         'loss': str(_model['OneVsRestClassifier'].classifier.loss),
                         'l2': _model['OneVsRestClassifier'].classifier.l2,
                         'intercept_init':_model['OneVsRestClassifier'].classifier.intercept_init,
-                        'intercept_lr': _intercept,
+                        #'intercept_lr': _intercept,
+                        'intercept_lr': str(_model['OneVsRestClassifier'].classifier.intercept_lr.learning_rate),
                         'clip_gradient': _model['OneVsRestClassifier'].classifier.clip_gradient,
                         'initializer':str(_model['OneVsRestClassifier'].classifier.initializer)
                         }
@@ -205,7 +206,10 @@ def create_model():
                         'p': _model['KNNClassifier'].p
                         }
                     }     
-                     
+        
+        print(info)
+        sys.stdout.flush()
+             
         result = {
                     'Result':'OK',
                     'Data': info
@@ -240,6 +244,29 @@ def existing_models():
     
     result = check_models()
     
+    response = flask.jsonify(result)
+    response.headers.set('Content-Type', 'application/json')
+    
+    return response
+
+@app.route('/api/v1/load_model', methods = ['GET'])
+@auto.doc(args=['model_type', 'name'])
+                                  
+def loading_model():
+    "Load the model" 
+    
+    model_type = request.args.get('model_type')
+    name = request.args.get('name')
+    
+    if model_type == None or name == None:
+        
+        result = {
+                'Result': 'NOT OK',
+                'Data': 'Please insert <model_type> and <name> parameters' 
+             }
+    else:    
+        result = model.load_model(model_type, name)
+        
     response = flask.jsonify(result)
     response.headers.set('Content-Type', 'application/json')
     
