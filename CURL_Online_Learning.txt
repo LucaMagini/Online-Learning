@@ -1,0 +1,41 @@
+curl.exe http://localhost:9999
+******************************************************************************************************************************
+#### SOME ERROR CASES ####
+curl.exe http://localhost:9999/api/v1/create_model?inexistent_param=XYZ
+curl.exe http://localhost:9999/api/v1/create_model?model_type=XYZ
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=XYZ&name=xyz1"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=LogisticRegression&name=lr1&inexistent_param=1"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=LogisticRegression&name=lr1&p=2"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=LogisticRegression&name=lr1&intercept_lr=xyz"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=LogisticRegression&name=lr1&loss=xyz"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=RandomForest&name=rf1&n_models=xyz&split_criterion=10"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=GaussianNB&name=gnb1&p=xyz"
+*****************************************************************************************************************************
+#### CREATE ALL AVAILABLE MODELS IN A PROPER WAY ####
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=LogisticRegression&name=lr1&intercept_lr=0.03&loss=Log"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=RandomForest&name=rf1&n_models=5&split_criterion=gini"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=GaussianNB&name=gnb1"
+curl.exe "http://localhost:9999/api/v1/create_model?model_type=KNN&name=knn1&n_neighbors=20&p=2"
+*****************************************************************************************************************************
+#### OPERATIONS ON MODELS ####
+curl.exe http://localhost:9999/api/v1/existing_models
+curl.exe http://localhost:9999/api/v1/load_model
+curl.exe "http://localhost:9999/api/v1/load_model?model_type=LogisticRegression&name=lr1"
+curl.exe "http://localhost:9999/api/v1/model_info?model_type=LogisticRegression&name=lr1"
+*****************************************************************************************************************************
+#### POST FOR INFERENCES ####
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_0.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_1.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_2.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_3.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_4.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_5.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_6.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_7.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_8.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_9.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_10.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_11.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_12.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_13.json" http://localhost:9999/api/v1/inference
+curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_14.json" http://localhost:9999/api/v1/inference

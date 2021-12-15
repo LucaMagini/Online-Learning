@@ -86,19 +86,6 @@
       "default": 6,
       "values": [ "N" ]
     },
-    "metric": {
-      "type": "string",
-      "default": "Accuracy",
-      "values": [
-        "Accuracy",
-        "BalancedAccuracy",
-        "BinaryMetric",
-        "ConfusionMatrix",
-        "MAE",
-        "MSE",
-        "RMSE"
-      ]
-    },
     "disable_weighted_vote": {
       "type": "string",
       "default": "False",

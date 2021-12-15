@@ -39,28 +39,28 @@ def check_models():
     gnb_models = []
     knn_models = []
     
-    models_list = glob.glob('*.pkl')
+    models_list = glob.glob("*/")
     for elem in models_list:
         end = elem.find("_")
         name = elem[:end]
         if name.lower() == 'logisticregression':
             start = elem.find("_")
-            end = elem.find(".")
+            end = elem.find("'\'")
             name = elem[start+1:end]
             lr_models.append(name)
         elif name.lower() == 'randomforest':
             start = elem.find("_")
-            end = elem.find(".")
+            end = elem.find("'\'")
             name = elem[start+1:end]
             rf_models.append(name)
         elif name.lower() == 'gaussiannb':
             start = elem.find("_")
-            end = elem.find(".")
+            end = elem.find("'\'")
             name = elem[start+1:end]
             gnb_models.append(name)    
         elif name.lower() == 'knn':
             start = elem.find("_")
-            end = elem.find(".")
+            end = elem.find("'\'")
             name = elem[start+1:end]
             knn_models.append(name)
     

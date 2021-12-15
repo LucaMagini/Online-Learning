@@ -110,7 +110,6 @@ def create_model():
     n_models = cast_string(request.args.get('n_models'), cast='int') if request.args.get('n_models') != None else int(default['n_models'])
     max_features = request.args.get('max_features') if request.args.get('max_features') != None else default['max_features']
     lambda_value = cast_string(request.args.get('lambda_value'), cast='int') if request.args.get('lambda_value') != None else int(default['lambda_value']) 
-    metric = request.args.get('metric') if request.args.get('metric') != None else default['metric']
     disable_weighted_vote = request.args.get('disable_weighted_vote') if request.args.get('disable_weighted_vote') != None else default['disable_weighted_vote']
     grace_period = cast_string(request.args.get('grace_period'), cast='int') if request.args.get('grace_period') != None else int(default['grace_period'])
     max_depth = cast_string(request.args.get('max_depth'), cast='int') if request.args.get('max_depth') != None else default['max_depth']
@@ -131,7 +130,7 @@ def create_model():
     params_logisticregression = [ model_type, name, optimizer, loss, l2, intercept_init,
                                   intercept_lr, clip_gradient, initializer ]
     params_randomforest = [ model_type, name, n_models, max_features, lambda_value,
-                                metric, disable_weighted_vote, grace_period, max_depth,
+                                disable_weighted_vote, grace_period, max_depth,
                                 split_criterion, leaf_prediction, nb_threshold,
                                 max_size, seed ]
     params_knn = [ model_type, name, n_neighbors, window_size, leaf_size, p ]
@@ -207,7 +206,6 @@ def create_model():
                         }
                     }     
         
-        print(info)
         sys.stdout.flush()
              
         result = {
@@ -263,13 +261,51 @@ def loading_model():
         result = {
                 'Result': 'NOT OK',
                 'Data': 'Please insert <model_type> and <name> parameters' 
-             }
+                }
     else:    
         result = model.load_model(model_type, name)
         
     response = flask.jsonify(result)
     response.headers.set('Content-Type', 'application/json')
     
+    return response
+
+@app.route('/api/v1/model_info', methods = ['GET'])
+@auto.doc(args=['model_type', 'name'])
+                                  
+def model_info():
+    "Get the model info" 
+    
+    model_type = request.args.get('model_type')
+    name = request.args.get('name')
+    
+    if model_type == None or name == None:
+        
+        result = {
+                'Result': 'NOT OK',
+                'Data': 'Please insert <model_type> and <name> parameters' 
+                }
+    else:    
+        result = model.model_info(model_type, name)
+        
+    response = flask.jsonify(result)
+    response.headers.set('Content-Type', 'application/json')
+    
+    return response
+
+@app.route('/api/v1/inference', methods=['POST'])
+@auto.doc()
+def ml_inference():
+    """Send an observation and the model returns the prediction 
+       and the total accuracy """
+    
+    req_data = request.get_json()
+    res = model.inference(req_data['values'])
+               
+    
+    response = flask.jsonify(res)
+    response.headers.set('Content-Type', 'application/json')    
+
     return response
 
 
