@@ -316,7 +316,7 @@ class Model:
         
         observation = [ float(item) for item in observation ]
         
-        entity = { k:v for k,v in zip(self.dataset_info['features'][:-1], observation[:-1]) }
+        entity = { k:v for k,v in zip(self.dataset_info['features'], observation[:-1]) }
         target = int(observation[-1])
         
         

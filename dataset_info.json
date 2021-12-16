@@ -1,5 +1,5 @@
 {
-"dataset": "Wine-Quality",
+  "dataset": "winequality-white-shuffled.csv",
   "features": [
     "fixed acidity",
     "volatile acidity",
@@ -13,5 +13,5 @@
     "sulphates",
     "alcohol"
   ],
-"target":"quality"
+  "target": "quality"
 }
