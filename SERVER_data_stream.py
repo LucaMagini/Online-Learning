@@ -1,66 +1,76 @@
-import flask, json
+import requests, json, argparse, threading
 import pandas as pd
-from flask_selfdoc import Autodoc
-from flask import request
 from Models import Model
 
-app = flask.Flask(__name__)
-app.config['DEBUG'] = True
-app.config['JSON_SORT_KEYS'] = False
-auto = Autodoc(app)
-
-ip_address = '0.0.0.0'
+parser = argparse.ArgumentParser(description='''Simulate data stream for online learning method and 
+        get the prediction and total accuracy of the model''')
+parser.add_argument('model_type', help='[LogisticRegression, RandomForest, KNN, GaussianNB]')
+parser.add_argument('name', help='The name of the model')
+parser.add_argument('start', type=int, help='Dataset starting line for the flow')
+parser.add_argument('interval', type=int, help='Time interval of the flow in seconds')
+args = parser.parse_args()
 
 model = Model()
 
 with open('dataset_info.json') as json_file:
-    data = json.load(json_file)
-
+        data = json.load(json_file)
+        
 dataset = pd.read_csv(data['dataset'])
+start = 0
 
-@app.route('/api/v1/model_selection', methods = ['GET'])
-@auto.doc(args=['model_type', 'name', 'dataset', 'start'])
-                                  
-def model_selection():
-    "Shows the list of all the existing models" 
+def setup():
+        
+    model_type = args.model_type
+    name = args.name
+    global start
+    start = args.start
+    interval = args.interval
     
-
+    global dataset
+    dataset = dataset[start:]
     
-    response = flask.jsonify(result)
-    response.headers.set('Content-Type', 'application/json')
     
-    return response
-
-
-
-@app.route('/api/v1/data_stream', methods=['POST'])
-@auto.doc()
-def data_stream():
-    """Simulate data stream for online learning method and 
-       get the prediction and total accuracy of the model"""
+    result = requests.get("http://localhost:9999/api/v1/load_model?model_type={}&name={}".format(model_type, name))
+    result = result.json()
     
-    req_data = request.get_json()
-    res = model.inference(req_data['values'])
-               
+    message = result['Data']
+    result['Data'] = {'Message': message,
+                      'Dataset': data['dataset'],
+                      'Starting_Row': start,
+                      'Interval': interval
+                      }
     
-    response = flask.jsonify(res)
-    response.headers.set('Content-Type', 'application/json')    
-
-    return response
-
-
-
-
-
+    print(json.dumps(
+        result,
+        sort_keys=False,
+        indent=4,
+        separators=(',', ': ')
+    ))
+    print('------------------------------')
 
 
+def data_stream(n_row):
+    observ = dataset.iloc[n_row].tolist()
+    data = {"values": observ}
+    
+    result = requests.post("http://localhost:9999/api/v1/inference", json = data)
+    result = result.json()
+    
+    print(json.dumps(
+        result,
+        sort_keys=False,
+        indent=4,
+        separators=(',', ': ')
+    ))
+    print('------------------------------')
+    
+    global start
+    start += 1
+    
+    threading.Timer(5.0, data_stream, [start]).start()
 
+#SIMULATING DATA FLOW 
+   
+setup()   
+data_stream(start)
 
-
-
-
-
-
-
-if __name__ == "__main__":
-    app.run(host=ip_address, port=3333) 

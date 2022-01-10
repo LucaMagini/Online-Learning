@@ -1,5 +1,4 @@
 import flask, json
-import pandas as pd
 from flask_selfdoc import Autodoc
 from flask import request
 from Models import Model
@@ -18,14 +17,19 @@ with open('dataset_info.json') as json_file:
 
 dataset = None
 
-@app.route('/api/v1/try', methods=['GET'])
-@auto.doc()
+@app.route('/api/v1/try', methods=['GET', 'POST'])
+@auto.doc(args=['par'])
 def x():
+    
+    par = request.args.get('par')
     
     global dataset
     dataset = '5'
     
-    res = {'Data': dataset }
+    res = {
+            'Data': dataset,
+            'Data2': par
+           }
               
     response = flask.jsonify(res)
     response.headers.set('Content-Type', 'application/json')    

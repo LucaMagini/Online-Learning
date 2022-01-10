@@ -1,3 +1,7 @@
+******************************************************************************************************************************************************************
+
+---------- SERVER MACHINE LEARNING - ONLINE LEARNING ----------
+
 curl.exe http://localhost:9999
 ******************************************************************************************************************************************************************
 #### SOME ERROR CASES ####
@@ -40,3 +44,9 @@ curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-
 curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_13.json" http://localhost:9999/api/v1/inference
 curl.exe -H "Content-Type: application/json" -d @"C:\Users\alapp\Desktop\Online-Learning\Observations\obs_14.json" http://localhost:9999/api/v1/inference
 ******************************************************************************************************************************************************************
+
+---------- SERVER DATA FLOW SIMULATION ----------
+
+****************************************************************************************************************************************************************** 
+curl.exe "http://localhost:3333/api/v1/setup?model_type=LogisticRegression&name=lr1&dataset_start=0&interval=4"
+curl.exe http://localhost:3333/api/v1/data_stream
