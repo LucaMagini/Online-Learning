@@ -69,27 +69,42 @@ def setup():
 
 
 def data_stream(n_row):
-    observ = dataset.iloc[n_row].tolist()
-    data = {"values": observ}
+    try:
+        observ = dataset.iloc[n_row].tolist()
+        data = {"values": observ}
+        
+        result = requests.post("http://localhost:9999/api/v1/inference", json = data)
+        result = result.json()
+        
+        print(json.dumps(
+            result,
+            sort_keys=False,
+            indent=4,
+            separators=(',', ': ')
+        ))
+        print('------------------------------')
+        
+        global start
+        start += 1
     
-    result = requests.post("http://localhost:9999/api/v1/inference", json = data)
-    result = result.json()
-    
-    print(json.dumps(
-        result,
-        sort_keys=False,
-        indent=4,
-        separators=(',', ': ')
-    ))
-    print('------------------------------')
-    
-    global start
-    start += 1
-    
-    threading.Timer(args.interval, data_stream, [start]).start()
+        threading.Timer(args.interval, data_stream, [start]).start()
+        
+    except IndexError:       
+        result = {
+                    'Result':'OK',
+                    'Data':'No more data available'
+                 }
+        
+        print(json.dumps(
+            result,
+            sort_keys=False,
+            indent=4,
+            separators=(',', ': ')
+        ))
+        print('------------------------------')
 
 #SIMULATING DATA FLOW 
    
-value = setup()
+setup()
 data_stream(start)
 
