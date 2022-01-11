@@ -7,13 +7,15 @@ parser = argparse.ArgumentParser(description='''Simulate data stream for online 
 parser.add_argument('model_type', help='[LogisticRegression, RandomForest, KNN, GaussianNB]')
 parser.add_argument('name', help='The name of the model')
 parser.add_argument('start', type=int, help='Dataset starting line for the flow')
-parser.add_argument('interval', type=int, help='Time interval of the flow in seconds')
+parser.add_argument('interval', type=float, help='Time interval of the flow in seconds')
 args = parser.parse_args()
 
 model = Model()
 
 with open('dataset_info.json') as json_file:
         data = json.load(json_file)
+with open('config_model.json') as params_file:
+        model_param = json.load(params_file)        
         
 dataset = pd.read_csv(data['dataset'])
 start = 0
@@ -22,13 +24,11 @@ def setup():
         
     model_type = args.model_type
     name = args.name
-    global start
-    start = args.start
+    df_start = args.start
     interval = args.interval
     
     global dataset
-    dataset = dataset[start:]
-    
+    dataset = dataset[df_start:]
     
     result = requests.get("http://localhost:9999/api/v1/load_model?model_type={}&name={}".format(model_type, name))
     result = result.json()
@@ -47,6 +47,25 @@ def setup():
         separators=(',', ': ')
     ))
     print('------------------------------')
+    
+    if result['Result'] == 'NOT OK':
+        
+        url = "http://localhost:9999/api/v1/create_model?model_type={}&name={}".format(model_type, name) 
+        for param in model_param[model_type]:
+            if model_param[model_type][param] != "None":
+                elem = '&{}={}'.format(param, model_param[model_type][param])
+                url += elem
+        
+        result = requests.get(url)
+        result = result.json()
+        
+        print(json.dumps(
+            result,
+            sort_keys=False,
+            indent=4,
+            separators=(',', ': ')
+        ))
+        print('------------------------------')
 
 
 def data_stream(n_row):
@@ -67,10 +86,10 @@ def data_stream(n_row):
     global start
     start += 1
     
-    threading.Timer(5.0, data_stream, [start]).start()
+    threading.Timer(args.interval, data_stream, [start]).start()
 
 #SIMULATING DATA FLOW 
    
-setup()   
+value = setup()
 data_stream(start)
 

@@ -2,7 +2,7 @@ import flask, sys #sys.stdout.flush() [To print on console]
 from flask_selfdoc import Autodoc
 from flask import request
 from Models import Model, default
-from utilities import cast_string, check_models
+from utilities import cast_string, check_models, check_model_by_name
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
@@ -94,6 +94,18 @@ def create_model():
             response.headers.set('Content-Type', 'application/json')
             
             return response
+        
+    if check_model_by_name(name) == True:
+        
+        result = {
+                'Result':'NOT OK',
+                'Data':'A model called \'{}\' already exists'.format(name)
+             }
+            
+        response = flask.jsonify(result)
+        response.headers.set('Content-Type', 'application/json')
+        
+        return response
     
     #Create the model if all checks passed
     
@@ -148,11 +160,6 @@ def create_model():
         
         if model_type.lower() == 'logisticregression':
             
-            # if request.args.get('intercept_lr') != None:
-            #     _intercept = _model['OneVsRestClassifier'].classifier.intercept_lr
-            # else:
-            #     _intercept = str(_model['OneVsRestClassifier'].classifier.intercept_lr.learning_rate)
-            
             info = {'Model': model_type,
                     'Name': name,
                     'Parameters': { 
@@ -160,7 +167,6 @@ def create_model():
                         'loss': str(_model['OneVsRestClassifier'].classifier.loss),
                         'l2': _model['OneVsRestClassifier'].classifier.l2,
                         'intercept_init':_model['OneVsRestClassifier'].classifier.intercept_init,
-                        #'intercept_lr': _intercept,
                         'intercept_lr': str(_model['OneVsRestClassifier'].classifier.intercept_lr.learning_rate),
                         'clip_gradient': _model['OneVsRestClassifier'].classifier.clip_gradient,
                         'initializer':str(_model['OneVsRestClassifier'].classifier.initializer)
@@ -196,7 +202,8 @@ def create_model():
             
         elif model_type.lower() == 'knn':
             
-            info = {'Model': model_type,
+            info = {'Message': 'Model successfully created',
+                    'Model': model_type,
                     'Name': name,
                     'Parameters': { 
                         'n_neighbors': _model['KNNClassifier'].n_neighbors,

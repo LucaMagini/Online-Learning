@@ -319,10 +319,6 @@ class Model:
         entity = { k:v for k,v in zip(self.dataset_info['features'], observation[:-1]) }
         target = int(observation[-1])
         
-        
-        print(self.model['OneVsRestClassifier'].classifier.loss)
-        print(type(self.model['OneVsRestClassifier'].classifier.loss))
-        
         preds = self.model.predict_one(entity)
         self.model = self.model.learn_one(entity, target)
         self.metric = self.metric.update(target, preds)

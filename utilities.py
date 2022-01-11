@@ -97,3 +97,21 @@ def check_models():
              }   
     
     return result
+
+
+def check_model_by_name(model_name):
+    folders = glob.glob("*/")
+    model_names = []
+    for elem in folders:
+        start = elem.find("_")
+        name = elem[start+1:-1]
+        if name not in ["Observations", "_pycache__"]:
+            model_names.append(name)
+    
+    if model_name in model_names:
+        return True
+    else:
+        return False        
+
+    
+    

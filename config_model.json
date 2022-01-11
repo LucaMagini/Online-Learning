@@ -1,0 +1,33 @@
+{
+  "LogisticRegression": {
+    "optimizer": "None",
+    "loss": "Log",
+    "l2": 0.0,
+    "intercept_init": 0.0,
+    "intercept_lr": 0.01,
+    "clip_gradient": 0.01,
+    "initializer": "None"
+  },
+  "RandomForest": {
+    "n_models": 10,
+    "max_features": "sqrt",
+    "lambda_value": 6,
+    "disable_weighted_vote": "False",
+    "grace_period": 50,
+    "max_depth": "None",
+    "split_criterion": "info_gain",
+    "leaf_prediction": "nba",
+    "nb_threshold": 0,
+    "max_size": 32,
+    "seed": "None"
+    },
+  "KNN": {
+    "n_neighbors": 5,
+    "window_size": 1000,
+    "leaf_size": 30,
+    "p": 2
+    },
+    "GaussianNB": {
+    }
+  }
+
